@@ -32,42 +32,67 @@ class Map extends Component {
     },
     zoom: 10
   };
+  
+  getClientValue(clientDetail, key){
+    var returnValue = null;
+    if (key == "status"){
+      return clientDetail.status_en;
+    }
+    return returnValue;
+  }
+
   toggleMarker(case_no){
     console.log("Marker "+case_no+" is pressed")
   }
-  AnyReactComponent = ({ text, data, clientStatus }) => {
+  AnyReactComponent = ({ text, data, clientDetail }) => {
     var markerColour='#ffffff';
-    if(clientStatus == "discharged"){
-      markerColour = "#00ff00"
+    if (clientDetail!=null){
+      var clientStatus = clientDetail.status_en
+      if(clientStatus == "discharged"){
+        markerColour = "#00ff00"
+      }
+      else if (clientStatus == "hospitalised"){
+        markerColour = "#ff7575"
+      }
+      else if (clientStatus == "hospitalised_again"){
+        markerColour = "#d000ff"
+      }
+      else if (clientStatus == "deceased"){
+        markerColour = "#545454"
+      }
+      else if (clientStatus == "critical"){
+        markerColour = "#ff0000"
+      }
+      //console.log(data.case_no+": "+ clientStatus+", "+markerColour)
+      if (clientStatus!=null){
+        var titleText = data.case_no+"\n"
+        titleText+="Confirmation Date: "+clientDetail.confirmation_date+"\n"
+        titleText+="Gender: "+clientDetail.gender+"\n"
+        titleText+="Age: "+clientDetail.age+"\n"
+        titleText+="Hospital: "+clientDetail.hospital_en+"\n"
+        titleText+="Status: "+clientDetail.status_en+"\n"
+        titleText+="Client Type: "+clientDetail.type_en+"\n"
+        titleText+="Classification: "+clientDetail.classification_en+"\n"
+      return(
+        <div className="marker"
+          style={{ backgroundColor: markerColour, cursor: 'pointer'}}
+          title={titleText}
+        >
+        </div>
+      )
+      }
     }
-    else if (clientStatus == "hospitalised"){
-      markerColour = "#ff0000"
-    }
-    else if (clientStatus == "deceased"){
-      markerColour = "#545454"
-    }
-    //console.log(data.case_no+": "+ clientStatus+", "+markerColour)
-    return(
-      /*
-    <button type="button" class="btn btn-primary">Primary</button>
-    */
-   
-    <div className="marker"
-      style={{ backgroundColor: markerColour, cursor: 'pointer'}}
-      title={data.case_no+"\n"+"Status: "+clientStatus}
-    //onclick = {this.toggleMarker(case_no)}
-    />
-    )
+    return null;
   }
-  getClientStatus = (case_no)=>{
-    var status = ""
+  getClientDetail = (case_no)=>{
+    var detail = null
     this.state.CasesDetails.map(v=> {
       if (v.case_no == case_no){
-        status =  v.status
+        detail =  v
       }
     }
     )
-    return status
+    return detail
     //console.log(caseDetail);
     //return caseDetail.status
   }
@@ -78,10 +103,9 @@ class Map extends Component {
     var count = 0;
     var DotList = this.state.CasesLocationDetails.map((data)=>{
       count++;
-      if ((data.action_en=="Residence" || data.action_en=="Accommodation") && data.case_no!=''){
+      if ((data.action_en=="Residence" || data.action_en=="Accommodation") && data.case_no!=null){
         console.log(data.case_no+": "+data.lat+", "+data.lng)
-        let ClientStatus = this.getClientStatus(data.case_no)
-        console.log("ClientStatus: "+ClientStatus)
+        let clientDetail = this.getClientDetail(data.case_no)
       return(
         <AnyReactComponent
           lat={data.lat}
@@ -89,7 +113,7 @@ class Map extends Component {
           text={data.case_no}
           case_no={data.case_no}
           data={data}
-          clientStatus={ClientStatus}
+          clientDetail={clientDetail}
           //onClick={this.toggleMarker(data.case_no)}
         />
       )
