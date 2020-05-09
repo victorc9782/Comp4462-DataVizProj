@@ -47,15 +47,13 @@ class Map extends Component {
   AnyReactComponent = ({ text, data, clientDetail }) => {
     var markerColour='#ffffff';
     if (clientDetail!=null){
-      var clientStatus = clientDetail.status_en
+      var clientStatus = clientDetail.status
+
       if(clientStatus == "discharged"){
         markerColour = "#00ff00"
       }
-      else if (clientStatus == "hospitalised"){
+      else if (clientStatus == "hospitalised" || clientStatus == "hospitalised_again" || clientStatus == "serious" || clientStatus == "cricital" ){
         markerColour = "#ff7575"
-      }
-      else if (clientStatus == "hospitalised_again"){
-        markerColour = "#d000ff"
       }
       else if (clientStatus == "deceased"){
         markerColour = "#545454"
