@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
-import {button} from 'bootstrap';
-import Covid19CaseLocation from '../../Config/Covid19CaseLocation.json';
-import Covid19CasesDetails from '../../Config/Covid19CasesDetails.json';
+
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+
+
+import CaseLocation from '../../Config/CaseLocation.json';
+import CasesDetails from '../../Config/CasesDetails.json';
 import './Map.css';
 
 class Map extends Component {
@@ -16,11 +21,11 @@ class Map extends Component {
   componentWillMount(){
     console.log("componentWillMount()")
     let CasesDetails = []
-    Covid19CasesDetails.map((data)=>{
+    CasesDetails.map((data)=>{
       CasesDetails.push(data)
     })
     let CasesLocationDetails = []
-    Covid19CaseLocation.map((data)=>{
+    CaseLocation.map((data)=>{
       CasesLocationDetails.push(data)
     })
     this.setState({CasesDetails: CasesDetails, CasesLocationDetails: CasesLocationDetails})
