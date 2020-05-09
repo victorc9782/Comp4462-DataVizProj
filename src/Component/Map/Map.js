@@ -6,8 +6,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
 
-import CaseLocation from '../../Config/CaseLocation.json';
-import CasesDetails from '../../Config/CasesDetails.json';
+import CaseLocationJson from '../../Config/CaseLocation.json';
+import CasesDetailsJson from '../../Config/CasesDetails.json';
 import './Map.css';
 
 class Map extends Component {
@@ -21,11 +21,11 @@ class Map extends Component {
   componentWillMount(){
     console.log("componentWillMount()")
     let CasesDetails = []
-    CasesDetails.map((data)=>{
+    CasesDetailsJson.map((data)=>{
       CasesDetails.push(data)
     })
     let CasesLocationDetails = []
-    CaseLocation.map((data)=>{
+    CaseLocationJson.map((data)=>{
       CasesLocationDetails.push(data)
     })
     this.setState({CasesDetails: CasesDetails, CasesLocationDetails: CasesLocationDetails})
