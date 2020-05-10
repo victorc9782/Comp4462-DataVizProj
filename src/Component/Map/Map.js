@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import GoogleMapReact from 'google-map-react';
 
 import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
 
+import ClientMarker from './ClientMarker'
 
 import CaseLocationJson from '../../Config/CaseLocation.json';
 import CasesDetailsJson from '../../Config/CasesDetails.json';
@@ -38,14 +42,6 @@ class Map extends Component {
     zoom: 10
   };
   
-  getClientValue(clientDetail, key){
-    var returnValue = null;
-    if (key == "status"){
-      return clientDetail.status_en;
-    }
-    return returnValue;
-  }
-
   toggleMarker(case_no){
     console.log("Marker "+case_no+" is pressed")
   }
@@ -68,7 +64,7 @@ class Map extends Component {
       }
       //console.log(data.case_no+": "+ clientStatus+", "+markerColour)
       if (clientStatus!=null){
-        var titleText = data.case_no+"\n"
+        var titleText = data.case_no+"</br>"
         titleText+="Confirmation Date: "+clientDetail.confirmation_date+"\n"
         titleText+="Gender: "+clientDetail.gender+"\n"
         titleText+="Age: "+clientDetail.age+"\n"
@@ -77,10 +73,51 @@ class Map extends Component {
         titleText+="Client Type: "+clientDetail.type_en+"\n"
         titleText+="Classification: "+clientDetail.classification_en+"\n"
       return(
-        <div className="marker"
-          style={{ backgroundColor: markerColour, cursor: 'pointer'}}
-          title={titleText}
-        >
+        <div>
+          <Tooltip 
+            title={
+            <Fragment>
+              <Typography color="inherit">{data.case_no}</Typography>
+                <tr>
+                  <td>Confirmation Date:</td>
+                  <td>{clientDetail.confirmation_date}</td>
+                </tr>
+                <tr>
+                  <td>Gender: </td>
+                  <td>{clientDetail.gender}</td>
+                </tr>
+                <tr>
+                  <td>Age: </td>
+                  <td>{clientDetail.age}</td>
+                </tr>
+                <tr>
+                  <td>Hospital: </td>
+                  <td>{clientDetail.hospital_en}</td>
+                </tr>
+                <tr>
+                  <td>Status: </td>
+                  <td>{clientDetail.status_en}</td>
+                </tr>
+                <tr>
+                  <td>Client Type: </td>
+                  <td>{clientDetail.type_en}</td>
+                </tr>
+                <tr>
+                  <td>Classification: </td>
+                  <td>{clientDetail.classification_en}</td>
+                </tr>
+            </Fragment>
+            } 
+            style={{
+              backgroundColor: '#f5f5f9',
+              color: 'rgba(0, 0, 0, 0.87)',
+              maxWidth: 220,
+              fontSize: 12,
+              border: '1px solid #dadde9',
+            }}
+          >
+            <ClientMarker generatedBy="status" clientStatus = {clientDetail.status}/>
+          </Tooltip>
         </div>
       )
       }
