@@ -12,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import {Add, LocalHospital, Healing, Close, FlightLand, People, PersonPin} from '@material-ui/icons';
+import {Add, LocalHospital, Healing, Close, FlightLand, People, PersonPin, CheckCircleOutline, CancelOutlined} from '@material-ui/icons';
 
 import ClientMarker from './ClientMarker'
 
@@ -25,7 +25,7 @@ const options = [
 		'Case Classification',
 		'Hide sensitive notification content',
 		'Hide all notification content',
-	]
+  ]
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +34,13 @@ class Map extends Component {
       CasesLocationDetails: [],
 	  filterType: "status",
 	  anchorEl: null,
-	  selectedIndex: 0
+    selectedIndex: 0,
+    ClientStatusFilterConfig:{
+      discharged: false, //Set Default as false to enhance prefomance 
+      hospitalised: true,
+      critical: true,
+      deceased: true
+    }
 	  
     };
   }
@@ -70,8 +76,34 @@ class Map extends Component {
   toggleMarker(case_no){
     console.log("Marker "+case_no+" is pressed")
   }
+  toggleFilter(filterNo, itemName, prevFlag){
+    /*
+    filterNo:
+      0 = ClientStatus, clientDetail.status = [discharged, hospitalised:(hospitalised/hospitalised_again), critical:(critical/serious), deceased]
+      1 = Case Classification =[imported, local_close_contact, local_possibly, local_possibly_close_contact, local]
+    */
+    if (filterNo == 0){
+      var config = this.state.ClientStatusFilterConfig
+      if (itemName == 'discharged'){
+        config.discharged = !prevFlag
+        this.setState({ClientStatusFilterConfig: config})
+      }
+      else if (itemName == 'hospitalised'){
+        config.hospitalised = !prevFlag
+        this.setState({ClientStatusFilterConfig: config})
+      }
+      else if (itemName == 'critical'){
+        config.critical = !prevFlag
+        this.setState({ClientStatusFilterConfig: config})
+      }
+      else if (itemName == 'deceased'){
+        config.deceased = !prevFlag
+        this.setState({ClientStatusFilterConfig: config})
+      }
+    }
+  }
   AnyReactComponent = ({ text, data, clientDetail }) => {
-	const {filterType, selectedIndex} = this.state
+	const {filterType, selectedIndex, ClientStatusFilterConfig} = this.state
     var markerColour='#ffffff';
     if (clientDetail!=null){
 
@@ -122,7 +154,7 @@ class Map extends Component {
             }}
           >
 		  
-			<ClientMarker generatedBy={selectedIndex} clientStatus = {clientDetail.status} clientClassification = {clientDetail.classification}/>
+			<ClientMarker generatedBy={selectedIndex} clientStatus = {clientDetail.status} clientClassification = {clientDetail.classification} ClientStatusFilterConfig={ClientStatusFilterConfig}/>
           </Tooltip>
         </div>
       )
@@ -134,46 +166,90 @@ class Map extends Component {
 	if (selectedIndex == 0){
 		return(
 			<table>
-                <tr>
-                  <td>
-					<IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}}>
-					  <Healing style={{fontSize: 16}}/>
-					</IconButton>
-				  </td>
-                  <td>
-					discharged
-				  </td>
-                </tr>
-                <tr>
-                  <td>
-					<IconButton style={{ padding: '1px',backgroundColor: '#ff7575'}}>
-					  <LocalHospital style={{fontSize: 16}}/>
-					</IconButton>
-				  </td>
-                  <td>
-					hospitalised
-				  </td>
-                </tr>
-                <tr>
-                  <td>
-					<IconButton style={{ padding: '1px',backgroundColor: '#ff0000'}}>
-					  <LocalHospital style={{fontSize: 16}}/>
-					</IconButton>
-				  </td>
-                  <td>
-					critical
-				  </td>
-                </tr>
-                <tr>
-                  <td>
-						<IconButton style={{ padding: '1px',backgroundColor: '#545454'}}>
-						  <Close style={{fontSize: 16}}/>
-						</IconButton>
-				  </td>
-                  <td>
-					deceased
-				  </td>
-                </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}}>
+              <Healing style={{fontSize: 16}}/>
+            </IconButton>
+          </td>
+          <td>
+            discharged
+          </td>
+          <td>
+            {this.state.ClientStatusFilterConfig.discharged?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'discharged', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'discharged', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: '#ff7575'}}>
+              <LocalHospital style={{fontSize: 16}}/>
+            </IconButton>
+          </td>
+          <td>
+            hospitalised
+          </td>
+          <td>
+            {this.state.ClientStatusFilterConfig.hospitalised?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'hospitalised', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'hospitalised', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: '#ff0000'}}>
+              <LocalHospital style={{fontSize: 16}}/>
+            </IconButton>
+          </td>
+          <td>
+            critical
+          </td>
+          <td>
+            {this.state.ClientStatusFilterConfig.critical?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'critical', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'critical', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: '#545454'}}>
+              <Close style={{fontSize: 16}}/>
+            </IconButton>
+          </td>
+          <td>
+            deceased
+          </td>
+          <td>
+            {this.state.ClientStatusFilterConfig.deceased?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'deceased', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'deceased', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
+        </tr>
 			</table>
 		)
 	}
@@ -182,46 +258,46 @@ class Map extends Component {
 		const possiblyColour = '#545454'
 		return(
 			<table>
-                <tr>
-                  <td>
+        <tr>
+          <td>
 					<IconButton style={{ padding: '1px',backgroundColor: confirmedColour}}>
 					  <FlightLand style={{fontSize: 16}}/>
 					</IconButton>
+          </td>
+          <td>
+				  	imported
 				  </td>
-                  <td>
-					imported
+        </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: confirmedColour}}>
+              <People style={{fontSize: 16}}/>
+            </IconButton>
 				  </td>
-                </tr>
-                <tr>
-                  <td>
-					<IconButton style={{ padding: '1px',backgroundColor: confirmedColour}}>
-					  <People style={{fontSize: 16}}/>
-					</IconButton>
+          <td>
+					  Local Close Contact
 				  </td>
-                  <td>
-					Local Close Contact
+        </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: possiblyColour}}>
+              <PersonPin style={{fontSize: 16}}/>
+            </IconButton>
 				  </td>
-                </tr>
-                <tr>
-                  <td>
-					<IconButton style={{ padding: '1px',backgroundColor: possiblyColour}}>
-					  <PersonPin style={{fontSize: 16}}/>
-					</IconButton>
+          <td>
+            Possibly Local
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: possiblyColour}}>
+              <People style={{fontSize: 16}}/>
+            </IconButton>
 				  </td>
-                  <td>
-					Possibly Local
+          <td>
+					  Possibly Local Close Contact
 				  </td>
-                </tr>
-                <tr>
-                  <td>
-					<IconButton style={{ padding: '1px',backgroundColor: possiblyColour}}>
-					  <People style={{fontSize: 16}}/>
-					</IconButton>
-				  </td>
-                  <td>
-					Possibly Local Close Contact
-				  </td>
-                </tr>
+        </tr>
 			</table>
 		)
 	}

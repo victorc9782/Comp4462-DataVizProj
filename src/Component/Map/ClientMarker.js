@@ -119,31 +119,32 @@ const criticalMarker = () => {
 	 }
 	return null
  }
- function ClientMarkByStatus({clientStatus}){
-      if(clientStatus == "discharged"){
+ function ClientMarkByStatus({clientStatus, ClientStatusFilterConfig}){
+      if(clientStatus == "discharged" && ClientStatusFilterConfig.discharged){
         return(
-		dischargedMarker()
+		      dischargedMarker()
         )
       }
-      else if (clientStatus == "hospitalised" || clientStatus == "hospitalised_again" ){
+      else if ((clientStatus == "hospitalised" || clientStatus == "hospitalised_again") && ClientStatusFilterConfig.hospitalised ){
         return(
         hospitalisedMarker()
         )
       }
-      else if (clientStatus == "deceased"){
+      else if (clientStatus == "deceased" && ClientStatusFilterConfig.deceased){
         return (
             deceasedMarker()
         )
       }
-      else if (clientStatus == "critical" || clientStatus == "serious"){
+      else if ((clientStatus == "critical" || clientStatus == "serious") && ClientStatusFilterConfig.critical){
         return (
             criticalMarker()
         )
       }
+      return null
  }
- function ClientMarker({generatedBy, clientStatus, clientClassification}){
+ function ClientMarker({generatedBy, clientStatus, clientClassification, ClientStatusFilterConfig}){
     if (generatedBy == 0){
-        return <ClientMarkByStatus clientStatus ={ clientStatus}/>
+        return <ClientMarkByStatus clientStatus ={ clientStatus} ClientStatusFilterConfig={ClientStatusFilterConfig}/>
     }
 	else if (generatedBy == 1){
 		return <ClientMarkByClassification clientClassification={clientClassification}/>
