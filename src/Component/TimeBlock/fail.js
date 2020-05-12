@@ -29,7 +29,7 @@ class TimeBlock extends Component {
         const max_date = parseDate('25/4/2020');
         const date_range = (max_date-min_date)/(24*60*60*1000);
 
-        const x_scale = d3.scaleTime().range([0,width]).domain(date_range).nice();
+        const x_scale = d3.scaleTime().range([0,width]).domain([min_date,max_date]).nice();
 
         const color_scale = d3.scaleSequential(d3.interpolateYlOrBr).domain([-2,20]);
         
