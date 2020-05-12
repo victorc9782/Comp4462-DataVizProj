@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import GoogleMapReact from 'google-map-react';
+import {Switch} from '@material-ui/core';
 
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
@@ -57,8 +58,8 @@ class Map extends Component {
       status_en: "N/A",
       type_en: "N/A",
       classification_en: "N/A"
-    }
-	  
+    },
+	  isShowMap: true
     };
   }
   componentWillMount(){
@@ -141,6 +142,9 @@ class Map extends Component {
         this.setState({ClientCaseClassificationFilterConfig: config})
       }
     }
+  }
+  toggleShowMap(){
+    this.setState({isShowMap: !this.state.isShowMap})
   }
   updateClientInfobox(clientDetail){
     console.log("updateClientInfobox")
@@ -461,24 +465,27 @@ class Map extends Component {
   }
   render() {
     const AnyReactComponent = this.AnyReactComponent
-	const {anchorEl, selectedIndex, clientInfobox} = this.state
+	const {anchorEl, selectedIndex, clientInfobox, isShowMap} = this.state
     return (
       // Important! Always set the container height explicitly
       <div >
-		<div style={{ height: '85vh', width: '100%' }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyAd5lEr3jOvC2knuxINRDIznu6xWEVsfcw' }}
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-        >
-          {
-            this.List()
-          }
-        </GoogleMapReact>
-		</div>
+        {isShowMap?(
+          <div style={{ height: '85vh', width: '100%' }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{ key: 'AIzaSyAd5lEr3jOvC2knuxINRDIznu6xWEVsfcw' }}
+                defaultCenter={this.props.center}
+                defaultZoom={this.props.zoom}
+              >
+            {
+              this.List()
+            }
+          </GoogleMapReact>
+
+		    </div>
+        ):null}
 		
 		<Grid container style = {{flexGrow: 1}}spacing={2}>
-			<Grid item xs={2} style={{width: 100}}>
+			<Grid item xs={1} style={{width: 100}}>
 				<List component="nav" aria-label="Device settings">
 					<ListItem
 					  button
@@ -602,6 +609,12 @@ class Map extends Component {
   */}
 			</Grid>
 		</Grid>
+        <Switch
+            checked={this.state.isShowMap}
+            onChange={()=> this.toggleShowMap()}
+            name="ShowMap"
+            inputProps={{ 'aria-label': 'secondary checkbox' }}
+          />
       </div>
     );
   }
