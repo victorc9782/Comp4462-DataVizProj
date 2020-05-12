@@ -57,7 +57,7 @@ class TimeBlock extends Component {
     render() {
         return(
           <div className='container'>
-            <h1>Monthly Global Land-Surface Temperature</h1>
+            <h1>Testing</h1>
             <svg className='chart'></svg>
           </div>
         );
