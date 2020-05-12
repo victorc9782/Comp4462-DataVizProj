@@ -40,6 +40,23 @@ class Map extends Component {
       hospitalised: true,
       critical: true,
       deceased: true
+    },
+    ClientCaseClassificationFilterConfig:{
+      imported: false, //Set Default as false to enhance prefomance 
+      localCloseContact: true,
+      localPossibly: true,
+      localPossiblyCloseContact: true,
+      local: true
+    },
+    clientInfobox: {
+      case_no: 0,
+      confirmation_date: "N/A",
+      gender: "N/A",
+      age: "N/A",
+      hospital_en: "N/A",
+      status_en: "N/A",
+      type_en: "N/A",
+      classification_en: "N/A"
     }
 	  
     };
@@ -101,9 +118,46 @@ class Map extends Component {
         this.setState({ClientStatusFilterConfig: config})
       }
     }
+    else if (filterNo == 1){
+      var config = this.state.ClientCaseClassificationFilterConfig
+      if (itemName == 'imported'){
+        config.imported = !prevFlag
+        this.setState({ClientCaseClassificationFilterConfig: config})
+      }
+      else if (itemName == 'localCloseContact'){
+        config.localCloseContact = !prevFlag
+        this.setState({ClientCaseClassificationFilterConfig: config})
+      }
+      else if (itemName == 'localPossibly'){
+        config.localPossibly = !prevFlag
+        this.setState({ClientCaseClassificationFilterConfig: config})
+      }
+      else if (itemName == 'localPossiblyCloseContact'){
+        config.localPossiblyCloseContact = !prevFlag
+        this.setState({ClientCaseClassificationFilterConfig: config})
+      }
+      else if (itemName == 'local'){
+        config.local = !prevFlag
+        this.setState({ClientCaseClassificationFilterConfig: config})
+      }
+    }
+  }
+  updateClientInfobox(clientDetail){
+    console.log("updateClientInfobox")
+    var newClientInfo = {
+      case_no: clientDetail.case_no,
+      confirmation_date: clientDetail.confirmation_date,
+      gender: clientDetail.gender,
+      age: clientDetail.age,
+      hospital_en: clientDetail.hospital_en,
+      status_en: clientDetail.status_en,
+      type_en: clientDetail.type_en,
+      classification_en: clientDetail.classification_en
+    }
+    this.setState({clientInfobox: newClientInfo})
   }
   AnyReactComponent = ({ text, data, clientDetail }) => {
-	const {filterType, selectedIndex, ClientStatusFilterConfig} = this.state
+	const {filterType, selectedIndex, ClientStatusFilterConfig, ClientCaseClassificationFilterConfig} = this.state
     var markerColour='#ffffff';
     if (clientDetail!=null){
 
@@ -111,51 +165,9 @@ class Map extends Component {
       if (clientDetail.status!=null){
       return(
         <div>
-          <Tooltip 
-            title={
-            <Fragment>
-              <Typography color="inherit">{data.case_no}</Typography>
-                <tr>
-                  <td>Confirmation Date:</td>
-                  <td>{clientDetail.confirmation_date}</td>
-                </tr>
-                <tr>
-                  <td>Gender: </td>
-                  <td>{clientDetail.gender}</td>
-                </tr>
-                <tr>
-                  <td>Age: </td>
-                  <td>{clientDetail.age}</td>
-                </tr>
-                <tr>
-                  <td>Hospital: </td>
-                  <td>{clientDetail.hospital_en}</td>
-                </tr>
-                <tr>
-                  <td>Status: </td>
-                  <td>{clientDetail.status_en}</td>
-                </tr>
-                <tr>
-                  <td>Client Type: </td>
-                  <td>{clientDetail.type_en}</td>
-                </tr>
-                <tr>
-                  <td>Classification: </td>
-                  <td>{clientDetail.classification_en}</td>
-                </tr>
-            </Fragment>
-            } 
-            style={{
-              backgroundColor: '#f5f5f9',
-              color: 'rgba(0, 0, 0, 0.87)',
-              maxWidth: 220,
-              fontSize: 12,
-              border: '1px solid #dadde9',
-            }}
-          >
-		  
-			<ClientMarker generatedBy={selectedIndex} clientStatus = {clientDetail.status} clientClassification = {clientDetail.classification} ClientStatusFilterConfig={ClientStatusFilterConfig}/>
-          </Tooltip>
+          <a onClick={()=>this.updateClientInfobox(clientDetail)}>
+			      <ClientMarker generatedBy={selectedIndex} clientStatus = {clientDetail.status} clientClassification = {clientDetail.classification} ClientStatusFilterConfig={ClientStatusFilterConfig} ClientCaseClassificationFilterConfig={ClientCaseClassificationFilterConfig} />
+          </a>
         </div>
       )
       }
@@ -173,7 +185,7 @@ class Map extends Component {
             </IconButton>
           </td>
           <td>
-            discharged
+            Discharged
           </td>
           <td>
             {this.state.ClientStatusFilterConfig.discharged?(
@@ -194,7 +206,7 @@ class Map extends Component {
             </IconButton>
           </td>
           <td>
-            hospitalised
+            Hospitalised
           </td>
           <td>
             {this.state.ClientStatusFilterConfig.hospitalised?(
@@ -215,7 +227,7 @@ class Map extends Component {
             </IconButton>
           </td>
           <td>
-            critical
+            Critical
           </td>
           <td>
             {this.state.ClientStatusFilterConfig.critical?(
@@ -236,7 +248,7 @@ class Map extends Component {
             </IconButton>
           </td>
           <td>
-            deceased
+            Deceased
           </td>
           <td>
             {this.state.ClientStatusFilterConfig.deceased?(
@@ -265,8 +277,40 @@ class Map extends Component {
 					</IconButton>
           </td>
           <td>
-				  	imported
+				  	Imported
 				  </td>
+          <td>
+            {this.state.ClientCaseClassificationFilterConfig.imported?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'imported', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'imported', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <IconButton style={{ padding: '1px',backgroundColor: confirmedColour}}>
+              <PersonPin style={{fontSize: 16}}/>
+            </IconButton>
+				  </td>
+          <td>
+					  Local
+				  </td>
+          <td>
+            {this.state.ClientCaseClassificationFilterConfig.local?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'local', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'local', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
         </tr>
         <tr>
           <td>
@@ -277,6 +321,17 @@ class Map extends Component {
           <td>
 					  Local Close Contact
 				  </td>
+          <td>
+            {this.state.ClientCaseClassificationFilterConfig.localCloseContact?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'localCloseContact', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'localCloseContact', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
         </tr>
         <tr>
           <td>
@@ -286,6 +341,17 @@ class Map extends Component {
 				  </td>
           <td>
             Possibly Local
+          </td>
+          <td>
+            {this.state.ClientCaseClassificationFilterConfig.localPossibly?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossibly', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossibly', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
           </td>
         </tr>
         <tr>
@@ -297,6 +363,17 @@ class Map extends Component {
           <td>
 					  Possibly Local Close Contact
 				  </td>
+          <td>
+            {this.state.ClientCaseClassificationFilterConfig.localPossiblyCloseContact?(
+              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossiblyCloseContact', true)}>
+                <CheckCircleOutline style={{fontSize: 16}}/>
+              </IconButton>
+            ):(
+              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossiblyCloseContact', false)}>
+                <CancelOutlined style={{fontSize: 16}}/>
+              </IconButton>
+            )}
+          </td>
         </tr>
 			</table>
 		)
@@ -317,33 +394,74 @@ class Map extends Component {
   }
   List = () =>{
     const AnyReactComponent = this.AnyReactComponent
-    
+    const {selectedIndex, ClientStatusFilterConfig, ClientCaseClassificationFilterConfig} = this.state
     console.log("Client List: ")
     var count = 0;
     var DotList = this.state.CasesLocationDetails.map((data)=>{
       count++;
       if ((data.action_en=="Residence" || data.action_en=="Accommodation") && data.case_no!=null){
         console.log(data.case_no+": "+data.lat+", "+data.lng)
-        let clientDetail = this.getClientDetail(data.case_no)
-      return(
-        <AnyReactComponent
-          lat={data.lat}
-          lng={data.lng}
-          text={data.case_no}
-          case_no={data.case_no}
-          data={data}
-          clientDetail={clientDetail}
-          //onClick={this.toggleMarker(data.case_no)}
-        />
-      )
+        var clientDetail = this.getClientDetail(data.case_no)
+        var isGenerateComponment = false
+        if (clientDetail!=null){
+          if (selectedIndex == 0){
+            let clientStatus = clientDetail.status
+            if(clientStatus == "discharged" && ClientStatusFilterConfig.discharged){
+              isGenerateComponment = true
+            }
+            else if ((clientStatus == "hospitalised" || clientStatus == "hospitalised_again") && ClientStatusFilterConfig.hospitalised ){
+              isGenerateComponment = true
+            }
+            else if (clientStatus == "deceased" && ClientStatusFilterConfig.deceased){
+              isGenerateComponment = true
+            }
+            else if ((clientStatus == "critical" || clientStatus == "serious") && ClientStatusFilterConfig.critical){
+              isGenerateComponment = true
+            }
+          }
+          else if (selectedIndex == 1){
+            let clientClassification = clientDetail.classification
+            if(clientClassification == "imported"  && ClientCaseClassificationFilterConfig.imported){
+              isGenerateComponment = true
+            }
+            else if (clientClassification == "local_close_contact" && ClientCaseClassificationFilterConfig.localCloseContact){
+              isGenerateComponment = true
+            }
+            else if (clientClassification == "local_possibly" && ClientCaseClassificationFilterConfig.localPossibly){
+              isGenerateComponment = true
+            }
+            else if (clientClassification == "local_possibly_close_contact" && ClientCaseClassificationFilterConfig.localPossiblyCloseContact){
+              isGenerateComponment = true
+            }
+            else if (clientClassification == "local" && ClientCaseClassificationFilterConfig.local){
+              isGenerateComponment = true
+            }
+          }
+
+        }
+        if (isGenerateComponment){
+          return(
+            <AnyReactComponent
+              lat={data.lat}
+              lng={data.lng}
+              text={data.case_no}
+              case_no={data.case_no}
+              data={data}
+              clientDetail={clientDetail}
+              //onClick={this.toggleMarker(data.case_no)}
+            />
+          )
+        }
+        return null
       }
+      
     })
     console.log("count: "+count)
     return DotList
   }
   render() {
     const AnyReactComponent = this.AnyReactComponent
-	const {anchorEl, selectedIndex} = this.state
+	const {anchorEl, selectedIndex, clientInfobox} = this.state
     return (
       // Important! Always set the container height explicitly
       <div >
@@ -398,6 +516,90 @@ class Map extends Component {
 			</Grid>
 			<Grid item xs={2}>
 			  <this.MapKey selectedIndex = {selectedIndex}/>
+			</Grid>
+			<Grid item xs={1}>
+        {clientInfobox.case_no}
+			</Grid>
+			<Grid item xs={6}>
+        <Grid container item xs={12} spacing={1}> 
+          <Grid item xs={2}>
+            Gender: 
+          </Grid>
+          <Grid item xs={4}>
+            {clientInfobox.gender}
+          </Grid>
+          <Grid item xs={2}>
+            Age: 
+          </Grid>
+          <Grid item xs={4}>
+            {clientInfobox.age}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12} spacing={1}> 
+          <Grid item xs={2}>
+            Hospital:
+          </Grid>
+          <Grid item xs={4}>
+            {clientInfobox.hospital_en}
+          </Grid>
+          <Grid item xs={2}>
+            Confirmation Date:
+          </Grid>
+          <Grid item xs={4}>
+            {clientInfobox.confirmation_date}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12} spacing={1}> 
+          <Grid item xs={2}>
+            Status: 
+          </Grid>
+          <Grid item xs={4}>
+            {clientInfobox.status_en}
+          </Grid>
+          <Grid item xs={2}>
+            Client Type: 
+          </Grid>
+          <Grid item xs={4}>
+            {clientInfobox.type_en}
+          </Grid>
+        </Grid>
+        <Grid container item xs={12} spacing={1}> 
+          <Grid item xs={2}>
+            Classification:
+          </Grid>
+          <Grid item xs={4}>
+            {clientInfobox.classification_en}
+          </Grid>
+        </Grid>
+        {/*
+      <Fragment>
+              <tr>
+                <td>{clientInfobox.case_no}</td>
+              </tr>
+              <tr>
+                <td>Confirmation Date:</td>
+                <td>{clientInfobox.confirmation_date}</td>
+                <td>Gender: </td>
+                <td>{clientInfobox.gender}</td>
+              </tr>
+              <tr>
+                <td>Age: </td>
+                <td>{clientInfobox.age}</td>
+                <td>Hospital: </td>
+                <td>{clientInfobox.hospital_en}</td>
+              </tr>
+              <tr>
+                <td>Status: </td>
+                <td>{clientInfobox.status_en}</td>
+                <td>Client Type: </td>
+                <td>{clientInfobox.type_en}</td>
+              </tr>
+              <tr>
+                <td>Classification: </td>
+                <td>{clientInfobox.classification_en}</td>
+              </tr>
+          </Fragment>
+  */}
 			</Grid>
 		</Grid>
       </div>
