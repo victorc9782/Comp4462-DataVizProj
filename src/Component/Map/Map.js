@@ -23,9 +23,7 @@ import './Map.css';
 
 const options = [
 		'Client Status',
-		'Case Classification',
-		'Hide sensitive notification content',
-		'Hide all notification content',
+		'Case Classification'
   ]
 class Map extends Component {
   constructor(props) {
@@ -79,7 +77,7 @@ class Map extends Component {
       lat: 22.37,
       lng: 114.1
     },
-    zoom: 10
+    zoom: 11
   };
 	handleClickListItem = (event) => {
 		this.setState({anchorEl: event.currentTarget})
@@ -192,15 +190,11 @@ class Map extends Component {
             Discharged
           </td>
           <td>
-            {this.state.ClientStatusFilterConfig.discharged?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'discharged', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'discharged', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+                checked={this.state.ClientStatusFilterConfig.discharged}
+                onChange={()=>this.toggleFilter(selectedIndex, 'discharged', this.state.ClientStatusFilterConfig.discharged)}
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
           </td>
         </tr>
         <tr>
@@ -213,15 +207,11 @@ class Map extends Component {
             Hospitalised
           </td>
           <td>
-            {this.state.ClientStatusFilterConfig.hospitalised?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'hospitalised', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'hospitalised', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+                checked={this.state.ClientStatusFilterConfig.hospitalised}
+                onChange={()=>this.toggleFilter(selectedIndex, 'hospitalised', this.state.ClientStatusFilterConfig.hospitalised)}
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
           </td>
         </tr>
         <tr>
@@ -234,15 +224,11 @@ class Map extends Component {
             Critical
           </td>
           <td>
-            {this.state.ClientStatusFilterConfig.critical?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'critical', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'critical', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+                checked={this.state.ClientStatusFilterConfig.critical}
+                onChange={()=>this.toggleFilter(selectedIndex, 'critical', this.state.ClientStatusFilterConfig.critical)}
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
           </td>
         </tr>
         <tr>
@@ -255,15 +241,11 @@ class Map extends Component {
             Deceased
           </td>
           <td>
-            {this.state.ClientStatusFilterConfig.deceased?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'deceased', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'deceased', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+                checked={this.state.ClientStatusFilterConfig.deceased}
+                onChange={()=>this.toggleFilter(selectedIndex, 'deceased', this.state.ClientStatusFilterConfig.deceased)}
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
           </td>
         </tr>
 			</table>
@@ -284,15 +266,12 @@ class Map extends Component {
 				  	Imported
 				  </td>
           <td>
-            {this.state.ClientCaseClassificationFilterConfig.imported?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'imported', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'imported', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+                checked={this.state.ClientCaseClassificationFilterConfig.imported}
+                onChange={()=>{this.toggleFilter(selectedIndex, 'imported', true)}}
+                name="importedSwitch"
+                inputProps={{ 'aria-label': 'primary checkbox' }}
+              />
           </td>
         </tr>
         <tr>
@@ -305,15 +284,11 @@ class Map extends Component {
 					  Local
 				  </td>
           <td>
-            {this.state.ClientCaseClassificationFilterConfig.local?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'local', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'local', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+              checked={this.state.ClientCaseClassificationFilterConfig.local}
+              onChange={()=>this.toggleFilter(selectedIndex, 'local', this.state.ClientCaseClassificationFilterConfig.local)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
           </td>
         </tr>
         <tr>
@@ -326,15 +301,11 @@ class Map extends Component {
 					  Local Close Contact
 				  </td>
           <td>
-            {this.state.ClientCaseClassificationFilterConfig.localCloseContact?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'localCloseContact', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'localCloseContact', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+              checked={this.state.ClientCaseClassificationFilterConfig.localCloseContact}
+              onChange={()=>this.toggleFilter(selectedIndex, 'localCloseContact', this.state.ClientCaseClassificationFilterConfig.localCloseContact)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
           </td>
         </tr>
         <tr>
@@ -347,15 +318,11 @@ class Map extends Component {
             Possibly Local
           </td>
           <td>
-            {this.state.ClientCaseClassificationFilterConfig.localPossibly?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossibly', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossibly', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+              checked={this.state.ClientCaseClassificationFilterConfig.localPossibly}
+              onChange={()=>this.toggleFilter(selectedIndex, 'localPossibly', this.state.ClientCaseClassificationFilterConfig.localPossibly)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
           </td>
         </tr>
         <tr>
@@ -368,15 +335,11 @@ class Map extends Component {
 					  Possibly Local Close Contact
 				  </td>
           <td>
-            {this.state.ClientCaseClassificationFilterConfig.localPossiblyCloseContact?(
-              <IconButton style={{ padding: '1px',backgroundColor: '#00ff00'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossiblyCloseContact', true)}>
-                <CheckCircleOutline style={{fontSize: 16}}/>
-              </IconButton>
-            ):(
-              <IconButton style={{ padding: '1px',backgroundColor: '#545454'}} onClick={()=>this.toggleFilter(selectedIndex, 'localPossiblyCloseContact', false)}>
-                <CancelOutlined style={{fontSize: 16}}/>
-              </IconButton>
-            )}
+            <Switch
+              checked={this.state.ClientCaseClassificationFilterConfig.localPossiblyCloseContact}
+              onChange={()=>this.toggleFilter(selectedIndex, 'localPossiblyCloseContact', this.state.ClientCaseClassificationFilterConfig.localPossiblyCloseContact)}
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
           </td>
         </tr>
 			</table>
@@ -470,7 +433,7 @@ class Map extends Component {
       // Important! Always set the container height explicitly
       <div >
         {isShowMap?(
-          <div style={{ height: '85vh', width: '100%' }}>
+          <div style={{ height: '80vh', width: '100%' }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: 'AIzaSyAd5lEr3jOvC2knuxINRDIznu6xWEVsfcw' }}
                 defaultCenter={this.props.center}
@@ -484,8 +447,8 @@ class Map extends Component {
 		    </div>
         ):null}
 		
-		<Grid container style = {{flexGrow: 1}}spacing={2}>
-			<Grid item xs={1} style={{width: 100}}>
+		<Grid container style = {{flexGrow: 1}}spacing={1}>
+			<Grid item xs={2} style={{width: 100}}>
 				<List component="nav" aria-label="Device settings">
 					<ListItem
 					  button
@@ -527,7 +490,7 @@ class Map extends Component {
 			<Grid item xs={1}>
         {clientInfobox.case_no}
 			</Grid>
-			<Grid item xs={6}>
+			<Grid item xs={7}>
         <Grid container item xs={12} spacing={1}> 
           <Grid item xs={2}>
             Gender: 
